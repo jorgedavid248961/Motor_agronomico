@@ -52,8 +52,11 @@ def require_api_key(x_api_key: str | None = Header(default=None)) -> None:
 @app.get("/health", tags=["sistema"])
 def health():
     idx = servicio.index or {}
+    bundle = idx.get("bundle") or {}
     return {"status": "ok" if servicio.ready else "loading", "engine_version": motor.VERSION,
-            "cells": idx.get("n_cells"), "index_built_at_utc": idx.get("built_at_utc")}
+            "cells": idx.get("n_cells"), "index_built_at_utc": idx.get("built_at_utc"),
+            "territorial_source": "api_canonica", "bundle_generated_at_utc": bundle.get("generated_at_utc"),
+            "territorial_error": servicio.territorial_error}
 
 
 @app.get("/api/v1/catalogo", tags=["motor"])

@@ -26,4 +26,9 @@ if not DATABASE_URL:
 CORS_ORIGINS = [o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()]
 CORS_ORIGIN_REGEX = os.environ.get("CORS_ORIGIN_REGEX") or None
 API_KEY = os.environ.get("API_KEY") or None
-DATA_DIR = Path(os.environ.get("MOTOR_DATA_DIR") or ROOT)
+
+# API territorial canónica (API_CANONICA): fuente de los datos del territorio (NDVI, lluvia, suelos).
+TERRITORIAL_API_URL = (os.environ.get("TERRITORIAL_API_URL") or "").strip().rstrip("/")
+if not TERRITORIAL_API_URL:
+    raise RuntimeError("Falta la variable de entorno TERRITORIAL_API_URL (URL de la API territorial canónica).")
+TERRITORIAL_API_TIMEOUT = float(os.environ.get("TERRITORIAL_API_TIMEOUT") or 120)

@@ -1,4 +1,10 @@
-# Solo para probar en local: API + PostgreSQL.  docker compose up --build
+# Solo para probar en local: API del motor + PostgreSQL + API territorial canónica.  docker compose up --build
+#   motor:     http://localhost:8000/docs
+#   canónica:  http://127.0.0.1:8001/docs
+# La API canónica se define en su propio proyecto. Si no está en ../../API_CANONICA, exportar API_CANONICA_DIR.
+include:
+  - path: ${API_CANONICA_DIR:-../../API_CANONICA}/docker-compose.yml
+
 services:
   db:
     image: postgres:16-alpine
@@ -18,12 +24,15 @@ services:
     build: .
     environment:
       DATABASE_URL: postgresql://motor:motor@db:5432/motor
+      TERRITORIAL_API_URL: http://canonica:8000
       CORS_ORIGINS: http://localhost:3000
       API_KEY: ""
     ports:
       - "8000:8000"
     depends_on:
       db:
+        condition: service_healthy
+      canonica:
         condition: service_healthy
 
 volumes:
