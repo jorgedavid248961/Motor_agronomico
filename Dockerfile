@@ -13,8 +13,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-# Código y datos que usa la API (el bundle crudo de ~820 MB queda fuera por .dockerignore)
-COPY motor_agronomico_v41.py cuaderno_agronomico_unificado_2.3.json territorial_index_v41.json ./
+# Código y cuaderno. Los datos del territorio NO van en la imagen: se piden a la API canónica (TERRITORIAL_API_URL).
+COPY motor_agronomico_v41.py cuaderno_agronomico_unificado_2.3.json ./
 COPY app ./app
 
 RUN useradd --create-home --uid 10001 appuser && chown -R appuser /app

@@ -11,5 +11,6 @@ __pycache__/
 Dockerfile
 .dockerignore
 docker-compose.yml
-# Bundle crudo (≈ 820 MB): la API usa territorial_index_v41.json
+# Datos del territorio: la API los pide a la API canónica (TERRITORIAL_API_URL)
 territorial_canonical_unified.json
+territorial_index_v41.json
