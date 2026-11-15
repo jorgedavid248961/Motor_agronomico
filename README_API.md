@@ -61,9 +61,25 @@ export async function POST(req: Request) {
 }
 ```
 
+## Docker
+
+```bash
+docker compose up --build        # API en http://localhost:8000 + PostgreSQL local
+```
+
+O solo la imagen:
+
+```bash
+docker build -t motor-agronomico .
+docker run -p 8000:8000 -e DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DB motor-agronomico
+```
+
 ## Despliegue en Railway
 
-1. Subir esta carpeta **sin** `territorial_canonical_unified.json` ni `.env` (ya están en `.gitignore`).
+1. Subir esta carpeta **sin** `territorial_canonical_unified.json` ni `.env` (ya están en `.gitignore` y `.dockerignore`).
    Deben ir `motor_agronomico_v41.py`, `cuaderno_agronomico_unificado_2.3.json` y `territorial_index_v41.json`.
-2. Variables del servicio: `DATABASE_URL=${{Postgres.DATABASE_URL}}` (red interna), `CORS_ORIGINS`, `API_KEY`.
-3. El `Procfile` arranca uvicorn en `$PORT`. Railway sirve el dominio `*.up.railway.app` con HTTPS.
+2. En el proyecto de Railway: **New → Database → PostgreSQL** y **New → GitHub Repo** con este repositorio.
+   `railway.json` hace que Railway construya con el `Dockerfile` y use `/health` como healthcheck.
+3. Variables del servicio: `DATABASE_URL=${{Postgres.DATABASE_URL}}` (red interna), `CORS_ORIGINS`, `CORS_ORIGIN_REGEX`, `API_KEY`.
+   Opcional: `WEB_CONCURRENCY` para más workers de uvicorn (cada uno carga el índice en memoria).
+4. El contenedor escucha en `$PORT` (lo pone Railway). En **Settings → Networking → Generate Domain** se obtiene el dominio `*.up.railway.app` con HTTPS.
