@@ -1,0 +1,6 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+# El bundle crudo (≈ 820 MB) no se despliega: la API usa territorial_index_v41.json
+territorial_canonical_unified.json
